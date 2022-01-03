@@ -7,10 +7,7 @@ Please use your own GitHub account to upload the code and paste the repository U
     • Account.java should contains basic personal information like name, gender, birthdate, or any additional properties you would think to add.
 """
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 import os
-
-import sqlite3
 
 import click
 from flask.cli import with_appcontext
@@ -42,6 +39,11 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+    @app.route("/initdb")
+    def init_db():
+        db.create_all()
+        return "DB inited!"
+
     @app.route("/hello")
     def hello():
         return "Hello, World!"
@@ -51,14 +53,6 @@ def create_app(test_config=None):
         return f"<p>{username}</p>"
 
     return app
-
-
-@click.command("init-db")
-@with_appcontext
-def init_db_command():
-    """Clear existing data and create new tables."""
-    init_db()
-    click.echo("Initialized the database.")
 
 
 app = create_app()
