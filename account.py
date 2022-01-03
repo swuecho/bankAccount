@@ -21,7 +21,7 @@ def create_app(test_config=None):
         # a default secret that should be overridden by instance config
         SECRET_KEY="dev",
         # store the database in the instance folder
-        DATABASE=os.path.join(app.instance_path, "acount.sqlite"),
+        DATABASE=os.path.join(app.instance_path, "account.sqlite"),
     )
 
     db.init_app(app)
@@ -41,6 +41,7 @@ def create_app(test_config=None):
 
     @app.route("/initdb")
     def init_db():
+        print(app.config['DATABASE'])
         db.create_all()
         return "DB inited!"
 
