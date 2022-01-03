@@ -4,7 +4,8 @@ Please use your own GitHub account to upload the code and paste the repository U
     • Use jwt as authentication method (you might want to create a method to generate jwt so interviewer later can verify)
     • You can use text file or h2 db for storing data
     • Junit
-    • Account.java should contains basic personal information like name, gender, birthdate, or any additional properties you would think to add.
+    • Account.java should contains basic personal information like
+       name, gender, birthdate, or any additional properties you would think to add.
 """
 from flask import Flask
 import os
