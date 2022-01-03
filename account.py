@@ -103,7 +103,7 @@ def create_app(test_config=None):
         return "Hello, World!"
 
     @app.route("/account/<user_id>", methods=['GET'])
-    @app.route("/account/<user_id>", methods=['GET'])
+    @jwt_required()
     def get_user_by_user_id(user_id):
         user = db.session.query(User).get(user_id)
         if user:
@@ -116,6 +116,7 @@ def create_app(test_config=None):
             return ("user not found", 404)
 
     @app.route("/account/<user_id>", methods=['DELETE'])
+    @jwt_required()
     def delete_user_by_user_id(user_id):
         user = db.session.query(User).get(user_id)
         if user:
@@ -129,6 +130,7 @@ def create_app(test_config=None):
             return ("user not found", 404)
 
     @app.route("/account", methods=['POST'])
+    @jwt_required()
     def post_user():
         user_dict = request.get_json()
         print(user_dict)
@@ -140,6 +142,7 @@ def create_app(test_config=None):
         return jsonify({'id': user.id})
 
     @app.route("/account/<user_id>", methods=['PUT'])
+    @jwt_required()
     def update_user(user_id):
         user = db.session.query(User).get(user_id)
         if user:
