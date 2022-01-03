@@ -53,12 +53,22 @@ def create_app(test_config=None):
         return "Hello, World!"
 
     @app.route("/account/<user_id>", methods=['GET'])
-    def get_user_by_username(user_id):
+    def get_user_by_user_id(user_id):
         user = db.session.query(User).get(user_id)
         return jsonify({
             'id': user.id,
             'username': user.username,
             'email': user.email
+        })
+
+    @app.route("/account/<user_id>", methods=['DELETE'])
+    def delete_user_by_user_id(user_id):
+        user = db.session.query(User).get(user_id)
+        user_id = user.id
+        db.session.remove(user_id)
+        db.session.commit()
+        return jsonify({
+            'id': user_id,
         })
 
     @app.route("/account", methods=['POST'])
@@ -69,8 +79,6 @@ def create_app(test_config=None):
         db.session.add(user)
         db.session.commit()
         return jsonify({'id': user.id})
-
-    return app
 
     return app
 
