@@ -10,24 +10,11 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import os
 
-app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////tmp/test.db"
-db = SQLAlchemy(app)
+import sqlite3
 
-
-class User(db.Model):
-    # Account.java should contains basic personal information like
-    # name, gender, birthdate, or any additional properties you would think to add.
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-
-    def __repr__(self):
-        return "<User %r>" % self.username
-
-
-def init_db():
-    db.create_all()
+import click
+from flask.cli import with_appcontext
+from model import db, init_db
 
 
 def create_app(test_config=None):
@@ -37,8 +24,10 @@ def create_app(test_config=None):
         # a default secret that should be overridden by instance config
         SECRET_KEY="dev",
         # store the database in the instance folder
-        DATABASE=os.path.join(app.instance_path, "flaskr.sqlite"),
+        DATABASE=os.path.join(app.instance_path, "acount.sqlite"),
     )
+
+    db.init_app(app)
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
@@ -62,3 +51,14 @@ def create_app(test_config=None):
         return f"<p>{username}</p>"
 
     return app
+
+
+@click.command("init-db")
+@with_appcontext
+def init_db_command():
+    """Clear existing data and create new tables."""
+    init_db()
+    click.echo("Initialized the database.")
+
+
+app = create_app()
