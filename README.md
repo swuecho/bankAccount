@@ -12,6 +12,10 @@ flask run  --host=0.0.0.0 --port=5888
 
 # init db using
 http://localhost:5888/initdb
+
+#if username != "admin" or password != "test":
+
+admin,test is default user and pass (to save time)
 ```
 
 ## test pass 
