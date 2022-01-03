@@ -7,7 +7,7 @@ from account import create_app
 from account import init_db
 
 
-@pytest.fixture
+@pytest.fixture(scope='session')
 def client():
     db_fd, db_path = tempfile.mkstemp()
     app = create_app({'TESTING': True, 'DATABASE': db_path})
