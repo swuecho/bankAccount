@@ -83,7 +83,9 @@ def create_app(test_config=None):
     def post_user():
         user_dict = request.get_json()
         print(user_dict)
-        user = User(username=user_dict['username'], email=user_dict['email'])
+        user = User(username=user_dict['username'],
+                    email=user_dict['email'],
+                    birthday=user_dict['birthday'])
         db.session.add(user)
         db.session.commit()
         return jsonify({'id': user.id})
