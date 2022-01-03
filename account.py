@@ -55,21 +55,27 @@ def create_app(test_config=None):
     @app.route("/account/<user_id>", methods=['GET'])
     def get_user_by_user_id(user_id):
         user = db.session.query(User).get(user_id)
-        return jsonify({
-            'id': user.id,
-            'username': user.username,
-            'email': user.email
-        })
+        if user:
+            return jsonify({
+                'id': user.id,
+                'username': user.username,
+                'email': user.email
+            })
+        else:
+            return ("user not found", 404)
 
     @app.route("/account/<user_id>", methods=['DELETE'])
     def delete_user_by_user_id(user_id):
         user = db.session.query(User).get(user_id)
-        user_id = user.id
-        db.session.remove(user_id)
-        db.session.commit()
-        return jsonify({
-            'id': user_id,
-        })
+        if user:
+            user_id = user.id
+            db.session.delete(user)
+            db.session.commit()
+            return jsonify({
+                'id': user_id,
+            })
+        else:
+            return ("user not found", 404)
 
     @app.route("/account", methods=['POST'])
     def post_user():
