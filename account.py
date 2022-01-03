@@ -14,6 +14,7 @@ from flask.cli import with_appcontext
 from flask.json import jsonify
 from model import db, init_db, User
 import json
+from typing import Dict
 
 
 def create_app(test_config=None):
@@ -84,6 +85,17 @@ def create_app(test_config=None):
         user = User(username=user_dict['username'], email=user_dict['email'])
         db.session.add(user)
         db.session.commit()
+        return jsonify({'id': user.id})
+
+    @app.route("/account/<user_id>", methods=['PUT'])
+    def update_user(user_id):
+        user = db.session.query(User).get(user_id)
+        if user:
+            user_dict: Dict = request.get_json()
+            for key, value in user_dict.items():
+                if hasattr(user, key):
+                    setattr(user, key, value)
+            db.session.commit()
         return jsonify({'id': user.id})
 
     return app
