@@ -11,7 +11,7 @@ import os
 
 import click
 from flask.cli import with_appcontext
-from model import db, init_db
+from model import db, init_db, User
 
 
 def create_app(test_config=None):
@@ -21,8 +21,8 @@ def create_app(test_config=None):
         # a default secret that should be overridden by instance config
         SECRET_KEY="dev",
         # store the database in the instance folder
-        SQLALCHEMY_DATABASE_URI=os.path.join(app.instance_path,
-                                             "account.sqlite"),
+        SQLALCHEMY_DATABASE_URI="sqlite:///" +
+        os.path.join(app.instance_path, "account.sqlite"),
     )
 
     db.init_app(app)
@@ -42,7 +42,7 @@ def create_app(test_config=None):
 
     @app.route("/initdb")
     def init_db():
-        print(app.config['DATABASE'])
+        print(app.config['SQLALCHEMY_DATABASE_URI'])
         db.create_all()
         return "DB inited!"
 
@@ -53,6 +53,15 @@ def create_app(test_config=None):
     @app.route("/user/<username>", methods=['GET'])
     def get_user_by_username(username):
         return f"<p>{username}</p>"
+
+    @app.route("/user", methods=['POST'])
+    def post_user(username):
+        admin = User(username='user1', email='user1@example.com')
+        db.session.add(admin)
+        db.session.commit()
+        return f"<p>{admin.username} added</p>"
+
+    return app
 
     return app
 
