@@ -95,8 +95,15 @@ def create_app(test_config=None):
             for key, value in user_dict.items():
                 if hasattr(user, key):
                     setattr(user, key, value)
+            user_json = {
+                'id': user.id,
+                'username': user.username,
+                'email': user.email
+            }
             db.session.commit()
-        return jsonify({'id': user.id})
+            return jsonify(user_json)
+        else:
+            return ("user not found", 404)
 
     return app
 

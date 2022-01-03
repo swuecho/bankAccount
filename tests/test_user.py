@@ -3,6 +3,10 @@ def test_add_user(client):
     user_data = {"email": "user3@example.com", "username": "user3"}
     rv = client.post('/account', json=user_data)
     assert rv.json == {'id': 1}
+
+    rv_put = client.put(f"/account/{rv.json['id']}",
+                        json={"username": "user5"})
+    assert rv_put.json['username'] == 'user5'
     # check user exists in db
     rv_get = client.get(f"/account/{rv.json['id']}")
     assert rv_get.json['email'] == user_data['email']
