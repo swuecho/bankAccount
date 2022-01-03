@@ -31,6 +31,7 @@ def create_app(test_config=None):
     jwt = JWTManager(app)
     app.config.from_mapping(
         # a default secret that should be overridden by instance config
+        SQLALCHEMY_TRACK_MODIFICATIONS=False,
         SECRET_KEY="dev",
         # store the database in the instance folder
         SQLALCHEMY_DATABASE_URI="sqlite:///" +
