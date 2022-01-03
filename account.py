@@ -8,10 +8,12 @@ Please use your own GitHub account to upload the code and paste the repository U
 """
 from flask import Flask
 import os
+from flask import request
 
-import click
 from flask.cli import with_appcontext
+from flask.json import jsonify
 from model import db, init_db, User
+import json
 
 
 def create_app(test_config=None):
@@ -50,16 +52,22 @@ def create_app(test_config=None):
     def hello():
         return "Hello, World!"
 
-    @app.route("/user/<username>", methods=['GET'])
-    def get_user_by_username(username):
-        return f"<p>{username}</p>"
+    @app.route("/account/<user_id>", methods=['GET'])
+    def get_user_by_username(user_id):
+        user = db.session.query(User).get(user_id)
+        return jsonify({
+            'id': user.id,
+            'username': user.username,
+            'email': user.email
+        })
 
-    @app.route("/user", methods=['POST'])
-    def post_user(username):
-        admin = User(username='user1', email='user1@example.com')
-        db.session.add(admin)
+    @app.route("/account", methods=['POST'])
+    def post_user():
+        user_dict = request.get_json(silent=True)
+        user = User(username=user_dict['username'], email=user_dict['email'])
+        db.session.add(user)
         db.session.commit()
-        return f"<p>{admin.username} added</p>"
+        return jsonify({'id': user.id})
 
     return app
 
