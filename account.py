@@ -14,6 +14,7 @@ from flask.cli import with_appcontext
 from flask.json import jsonify
 from model import db, init_db, User
 import json
+from typing import Dict
 
 
 def create_app(test_config=None):
@@ -53,13 +54,29 @@ def create_app(test_config=None):
         return "Hello, World!"
 
     @app.route("/account/<user_id>", methods=['GET'])
-    def get_user_by_username(user_id):
+    def get_user_by_user_id(user_id):
         user = db.session.query(User).get(user_id)
-        return jsonify({
-            'id': user.id,
-            'username': user.username,
-            'email': user.email
-        })
+        if user:
+            return jsonify({
+                'id': user.id,
+                'username': user.username,
+                'email': user.email
+            })
+        else:
+            return ("user not found", 404)
+
+    @app.route("/account/<user_id>", methods=['DELETE'])
+    def delete_user_by_user_id(user_id):
+        user = db.session.query(User).get(user_id)
+        if user:
+            user_id = user.id
+            db.session.delete(user)
+            db.session.commit()
+            return jsonify({
+                'id': user_id,
+            })
+        else:
+            return ("user not found", 404)
 
     @app.route("/account", methods=['POST'])
     def post_user():
@@ -70,7 +87,23 @@ def create_app(test_config=None):
         db.session.commit()
         return jsonify({'id': user.id})
 
-    return app
+    @app.route("/account/<user_id>", methods=['PUT'])
+    def update_user(user_id):
+        user = db.session.query(User).get(user_id)
+        if user:
+            user_dict: Dict = request.get_json()
+            for key, value in user_dict.items():
+                if hasattr(user, key):
+                    setattr(user, key, value)
+            user_json = {
+                'id': user.id,
+                'username': user.username,
+                'email': user.email
+            }
+            db.session.commit()
+            return jsonify(user_json)
+        else:
+            return ("user not found", 404)
 
     return app
 
