@@ -6,4 +6,4 @@ def test_hello(client):
 def test_hello_protected(client):
     rv = client.get('/hello_protected', follow_redirects=True)
     print(rv.data)
-    assert rv.json == {"msg":"Missing Authorization Header"} 
+    assert rv.json == {"msg": "Missing Authorization Header"}
