@@ -1,6 +1,8 @@
 def test_add_user(client):
     # add user
+
     user_data = {"email": "user3@example.com", "username": "user3", "birthday": "19890506"}
+
     rv = client.post('/account', json=user_data)
     assert rv.json == {'id': 1}
 
