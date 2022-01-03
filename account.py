@@ -63,7 +63,8 @@ def create_app(test_config=None):
 
     @app.route("/account", methods=['POST'])
     def post_user():
-        user_dict = request.get_json(silent=True)
+        user_dict = request.get_json()
+        print(user_dict)
         user = User(username=user_dict['username'], email=user_dict['email'])
         db.session.add(user)
         db.session.commit()

@@ -10,8 +10,12 @@ from account import init_db
 @pytest.fixture(scope='session')
 def client():
     db_fd, db_path = tempfile.mkstemp()
-    app = create_app({'TESTING': True, 'DATABASE': db_path})
-
+    app = create_app({
+        'TESTING':
+        True,
+        'SQLALCHEMY_DATABASE_URI':
+        "sqlite:///" + os.path.join(db_path)
+    })
     with app.test_client() as client:
         with app.app_context():
             init_db()
