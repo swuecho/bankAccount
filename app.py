@@ -23,3 +23,8 @@ class User(db.Model):
 
     def __repr__(self):
         return "<User %r>" % self.username
+
+
+@app.route("/")
+def hello_world():
+    return "<p>Hello, World!</p>"

@@ -131,10 +131,18 @@ python-versions = ">=3.6"
 [package.extras]
 watchdog = ["watchdog"]
 
+[[package]]
+name = "yapf"
+version = "0.32.0"
+description = "A formatter for Python code."
+category = "dev"
+optional = false
+python-versions = "*"
+
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "f333133c92cc432f5ba9717d2715f2042d888f74dce0adb025e2dd3df2a9ce1e"
+content-hash = "9230eeec3d3075681b98e95f99e85471ee55eb4c7294344cd0fff25648b6dd51"
 
 [metadata.files]
 click = [
@@ -330,4 +338,8 @@ sqlalchemy = [
 werkzeug = [
     {file = "Werkzeug-2.0.2-py3-none-any.whl", hash = "sha256:63d3dc1cf60e7b7e35e97fa9861f7397283b75d765afcaefd993d6046899de8f"},
     {file = "Werkzeug-2.0.2.tar.gz", hash = "sha256:aa2bb6fc8dee8d6c504c0ac1e7f5f7dc5810a9903e793b6f715a9f015bdadb9a"},
+]
+yapf = [
+    {file = "yapf-0.32.0-py2.py3-none-any.whl", hash = "sha256:8fea849025584e486fd06d6ba2bed717f396080fd3cc236ba10cb97c4c51cf32"},
+    {file = "yapf-0.32.0.tar.gz", hash = "sha256:a3f5085d37ef7e3e004c4ba9f9b3e40c54ff1901cd111f05145ae313a7c67d1b"},
 ]
